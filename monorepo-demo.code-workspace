@@ -1,0 +1,21 @@
+{
+  "folders": [
+    {
+      "path": "apps/frontend",
+      "name": "frontend",
+    },
+    {
+      "path": "apps/backend",
+      "name": "backend",
+    },
+    {
+      "path": ".",
+      "name": "root",
+    },
+  ],
+  "settings": {
+    "i18n-ally.localesPaths": ["src/locales/json", "src/locales"],
+    "i18n-ally.sourceLanguage": "en-US",
+    "i18n-ally.keystyle": "nested",
+  },
+}
