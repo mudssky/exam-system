@@ -1,0 +1,129 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
+}
+
+generator docs {
+  provider = "node node_modules/prisma-docs-generator"
+  output   = "./docs"
+}
+
+datasource db {
+  // provider = "sqlite"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserStatus {
+  ACTIVE //正常
+  INACTIVE //暂时未使用
+  DISABLE //禁用
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum FileTag {
+  AVATAR //用户头像
+  NOTAG //无标签，默认值,也就是临时文件
+}
+
+// 注册方式需要做一个区分
+enum RegistryType {
+  NORMAL //正常注册
+  GITHUB //github注册
+  GOOGLE //google注册
+}
+
+/// 用户表
+model User {
+  id             String       @id @default(uuid(7))
+  /// 邮箱
+  email          String?      @unique
+  /// 用户名
+  name           String       @unique
+  /// 密码
+  password       String?
+  /// 用户头像
+  avatarUrl      String?
+  /// 角色
+  role           Role         @default(USER)
+  /// 用户状态
+  status         UserStatus   @default(ACTIVE)
+  /// 注册时间
+  createdAt      DateTime     @default(now())
+  /// 注册方式
+  registryType   RegistryType @default(NORMAL)
+  /// github id
+  githubId       String?      @unique
+  /// github 授权信息
+  githubAuthInfo String?
+  /// google id
+  googleId       String?      @unique
+  /// google 授权信息
+  googleAuthInfo String?
+
+  @@index([id])
+}
+
+/// 文件上传表
+model UploadFiles {
+  id               String   @id @default(uuid(7))
+  /// 文件名
+  fileName         String
+  /// 原始文件名
+  originalFilename String
+  /// 短路径
+  filePath         String
+  /// 文件大小
+  fileSize         Int
+  /// 创建时间
+  createdAt        DateTime @default(now())
+  /// 更新时间
+  updatedAt        DateTime @updatedAt
+  /// 表示文件使用模块的标签
+  fileTag          FileTag? @default(NOTAG)
+}
+
+// 短链服务
+
+enum ShortURLStatus {
+  ENABLE
+  DISABLE
+}
+
+/// 短链服务表
+model ShortUrl {
+  id      String         @id @default(uuid(7))
+  /// 压缩码启用状态
+  status  ShortURLStatus @default(DISABLE)
+  /// 压缩码
+  code    String         @unique
+  /// 原始链接
+  longUrl String?        @unique
+
+  @@index([code])
+}
+
+model MeetingRooms {
+  id String @id @default(uuid(7))
+}
+
+// casbin 权限规则表
+model CasbinRule {
+  id    String  @id @default(uuid(7))
+  ptype String
+  v0    String?
+  v1    String?
+  v2    String?
+  v3    String?
+  v4    String?
+  v5    String?
+
+  @@map("casbin_rule")
+}

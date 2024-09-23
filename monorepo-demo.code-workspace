@@ -18,4 +18,53 @@
     "i18n-ally.sourceLanguage": "en-US",
     "i18n-ally.keystyle": "nested",
   },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node",
+        "request": "launch",
+        "cwd": "${workspaceFolder:backend}",
+        "name": "backend/analyse",
+        "runtimeExecutable": "pnpm",
+        "args": ["start:dev", "analyse"],
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "cwd": "${workspaceFolder:backend}",
+        "name": "backend/answer",
+        "runtimeExecutable": "pnpm",
+        "args": ["start:dev", "answer"],
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "cwd": "${workspaceFolder:backend}",
+        "name": "backend/exam",
+        "runtimeExecutable": "pnpm",
+        "args": ["start:dev", "exam"],
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "cwd": "${workspaceFolder:backend}",
+        "name": "backend/user",
+        "runtimeExecutable": "pnpm",
+        "args": ["start:dev", "user"],
+      },
+    ],
+    "compounds": [
+      {
+        "name": "backend(all)",
+        "configurations": [
+          "backend/analyse",
+          "backend/answer",
+          "backend/exam",
+          "backend/user",
+        ],
+        "stopAll": true,
+      },
+    ],
+  },
 }
