@@ -11,6 +11,7 @@ import { GithubStrategy } from './strategy/github.strategy';
 import { GoogleStrategy } from './strategy/google.strategy';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { LocalStrategy } from './strategy/local.strategy';
+import { EmailModule, EnvironmentVariables } from '@lib';
 
 @Module({
   imports: [
@@ -28,6 +29,26 @@ import { LocalStrategy } from './strategy/local.strategy';
         return config;
       },
       inject: [ConfigService], // 注入 ConfigService
+    }),
+    EmailModule.forRootAsync({
+      isGlobal: true,
+      useFactory: async (
+        configService: ConfigService<EnvironmentVariables>,
+      ) => {
+        return {
+          smtpOptions: {
+            // host: configService.get('MAIL_HOST'),
+            // port: configService.get('MAIL_PORT'),
+            // secure: false,
+            service: configService.get('MAIL_SERVICE_NAME'),
+            auth: {
+              user: configService.get('MAIL_USER'),
+              pass: configService.get('MAIL_PASS'),
+            },
+          },
+        };
+      },
+      inject: [ConfigService],
     }),
   ],
   controllers: [AuthController],
