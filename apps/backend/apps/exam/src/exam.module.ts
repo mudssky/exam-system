@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ExamController } from './exam.controller';
 import { ExamService } from './exam.service';
-import { RedisModule } from 'libs';
+import { PrismaModule, RedisModule } from 'libs';
 import { APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { JwtAuthGuard } from '@app/user/auth/guards';
 import { GlobalValidationPipe } from '@libs/common/pipes/global-validation/global-validation.pipe';
@@ -14,6 +14,7 @@ import { GlobalValidationPipe } from '@libs/common/pipes/global-validation/globa
         port: 6379,
       },
     }),
+    PrismaModule,
   ],
   controllers: [ExamController],
   providers: [
